@@ -5,7 +5,7 @@ class CharacterScreen extends StatelessWidget {
   final String title;
   final String imgurl;
   final String description;
-  CharacterScreen({
+  const CharacterScreen({
     super.key,
     required this.title,
     required this.imgurl,
