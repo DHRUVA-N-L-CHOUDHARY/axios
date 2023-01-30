@@ -17,25 +17,25 @@ class _IntroScreenState extends State<IntroScreen> {
   MediaQueryData? _mediaQueryData;
   double? screenWidth;
   double? screenHeight;
-   
+
   @override
   Widget build(BuildContext context) {
-     _mediaQueryData = MediaQuery.of(context);
+    _mediaQueryData = MediaQuery.of(context);
     screenHeight = _mediaQueryData?.size.height;
     screenWidth = _mediaQueryData?.size.width;
 
     // Get the proportionate height as per screen size
-  double getProportionateScreenHeight(double inputHeight) {
-    // 812 is the layout height that designer use
-    return (inputHeight / 812.0) * screenHeight!;
-  }
+    double getProportionateScreenHeight(double inputHeight) {
+      // 812 is the layout height that designer use
+      return (inputHeight / 812.0) * screenHeight!;
+    }
 
-  // Get the proportionate height as per screen size
-  double getProportionateScreenWidth(double inputWidth) {
-    // 375 is the layout width that designer use
-    return (inputWidth / 375.0) * screenWidth!;
-  }
-    
+    // Get the proportionate height as per screen size
+    double getProportionateScreenWidth(double inputWidth) {
+      // 375 is the layout width that designer use
+      return (inputWidth / 375.0) * screenWidth!;
+    }
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -53,7 +53,7 @@ class _IntroScreenState extends State<IntroScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-             SizedBox(
+            SizedBox(
               height: getProportionateScreenHeight(100),
             ),
             const Text(
@@ -65,7 +65,7 @@ class _IntroScreenState extends State<IntroScreen> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-             SizedBox(
+            SizedBox(
               height: getProportionateScreenHeight(100),
             ),
             Padding(
@@ -110,21 +110,29 @@ class _IntroScreenState extends State<IntroScreen> {
                       .get(
                           "$sp&apikey=70012023d1a3cd4fc190b9934437d42b&hash=aa9a93889872cae506a1605a14a362aa")
                       .catchError((err) {});
-                  if (response == null) return ;
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) {
-                      return MyWidget(
-                        description: response["data"]["results"][0]
-                                ["description"]
-                            .toString(),
-                        imgurl: response["data"]["results"][0]["thumbnail"]
-                                ["path"]
-                            .toString(),
-                        title:
-                            response["data"]["results"][0]["name"].toString(),
-                      );
-                    },
-                  ));
+                  if (response == null) return;
+                  if (response["data"]["count"] == 0) {
+                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Error:- Not found!"),
+                    ));
+                  }
+                  else
+                  {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) {
+                        return MyWidget(
+                          description: response["data"]["results"][0]
+                                  ["description"]
+                              .toString(),
+                          imgurl: response["data"]["results"][0]["thumbnail"]
+                                  ["path"]
+                              .toString(),
+                          title:
+                              response["data"]["results"][0]["name"].toString(),
+                        );
+                      },
+                    ));
+                  } 
                 },
                 child: Container(
                   height: getProportionateScreenHeight(40),
